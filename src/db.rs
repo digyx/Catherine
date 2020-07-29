@@ -20,17 +20,29 @@ fn input() -> String {
 
 
 // CRUD functions
-fn put(mut db: HashMap<String, Entry>, mut cmd: std::str::SplitWhitespace) -> DB {
+fn put(mut db: DB, mut cmd: std::str::SplitWhitespace) -> DB {
     let key = String::from(cmd.next().expect("nil"));
 
-    let mut item = Entry::new();
-    
-    item.insert(
-        String::from(cmd.next().expect("nil")),
-        String::from(cmd.next().expect("nil"))
-    );
+    let entry = db.get_mut(key.as_str());
 
-    db.insert(key, item);
+    match entry {
+        Some(item) => {
+            item.insert(
+                String::from(cmd.next().expect("nil")),
+                String::from(cmd.next().expect("nil"))
+            );
+        },
+        None => {  // primary_key does not exist in DB yet
+            let mut item = Entry::new();
+
+            item.insert(
+                String::from(cmd.next().expect("nil")),
+                String::from(cmd.next().expect("nil"))
+            );
+
+            db.insert(key, item);
+        }
+    }
 
     db
 }
