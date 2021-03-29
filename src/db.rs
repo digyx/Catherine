@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
 // Type alias
-pub struct Database {
-    store: HashMap<String, PrimaryNode>,
+struct Database {
     name: String,
+    store: HashMap<String, PrimaryNode>,
 }
 
 struct PrimaryNode {
