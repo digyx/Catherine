@@ -18,14 +18,40 @@ struct SecondaryNode {
 
 impl Database {
     fn put(&mut self, prime_key: String, second_key: String, value: String) {
-        // Placeholder
+        let inner_node = SecondaryNode{
+            key: second_key.clone(),
+            value: value.clone()
+        };
+
+        match self.store.get_mut(prime_key.as_str()) {
+            Some(node) => {
+                node.value.insert(second_key, inner_node);
+            },
+
+            // Creates a new Primary Node since one doesn't exist
+            None => {
+                let mut inner_store: HashMap<String, SecondaryNode> = HashMap::new();
+                inner_store.insert(second_key, inner_node);
+
+                let prime_node = PrimaryNode{
+                    key: prime_key.clone(),
+                    value: inner_store,
+                };
+
+                self.store.insert(prime_key, prime_node);
+            }
+        }
     }
-    
-    fn get(&self, prime_key: String, second_key: String) -> Option<SecondaryNode> {
-        // Grab from the primary or secondary key
-        None
+
+    fn get(&self, prime_key: String, second_key: String) -> String {
+        let prime = self.store.get(prime_key.as_str());
+
+        match prime {
+            Some(node) => unwrap(node.value.get(second_key.as_str())),
+            None => String::from("null"),
+        }
     }
-    
+
     fn update(&mut self, prime_key: String, second_key: String, value: String) {
         self.put(prime_key, second_key, value);
     }
@@ -44,9 +70,10 @@ pub fn new() -> Database {
     }
 }
 
-fn unwrap(result: Option<&String>) -> String {
+
+fn unwrap(result: Option<&SecondaryNode>) -> String {
     match result {
-        Some(item) => (*item).clone(),
+        Some(item) => (*item).value.clone(),
         None => String::from("nil")
     }
 }
