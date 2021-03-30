@@ -4,6 +4,7 @@ use std::collections::HashMap;
 pub struct Database {
     name: String,
     store: HashMap<String, PrimaryNode>,
+    response: String,
 }
 
 struct PrimaryNode {
@@ -55,6 +56,14 @@ impl Database {
     pub fn delete(&mut self, prime_key: String, second_key: String) {
         // Delete from secondary key
     }
+
+    pub fn set_response(&mut self, msg: String) {
+        self.response = msg;
+    }
+
+    pub fn get_response(&self) -> String{
+        self.response.clone()
+    }
 }
 
 
@@ -62,7 +71,8 @@ impl Database {
 pub fn new() -> Database {
     Database{
         store: HashMap::new(),
-        name: String::from("Hello world")
+        name: String::from("Hello world"),
+        response: String::new(),
     }
 }
 

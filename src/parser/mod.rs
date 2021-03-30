@@ -20,29 +20,31 @@ impl Parser {
                 let second_key = self.next_token().get_literal();
                 let value = self.next_token().get_literal();
 
-                db.put(prime_key, second_key, value);
+                db.put(prime_key.clone(), second_key.clone(), value.clone());
+                db.set_response(format!("{}: {{ {}: {} }}", prime_key, second_key, value));
             },
+
             TokenType::Get => {
                 let prime_key = self.next_token().get_literal();
                 let second_key = self.next_token().get_literal();
-                
-                let val = db.get(prime_key, second_key);
 
-                println!("{}", val);
+                let value = db.get(prime_key, second_key);
+                db.set_response(value);
             },
+            
             TokenType::Delete => {
                 let prime_key = self.next_token().get_literal();
                 let second_key = self.next_token().get_literal();
                 
-                
-                db.delete(prime_key, second_key);
+                db.delete(prime_key.clone(), second_key.clone());
+                db.set_response(format!("{}: {}", prime_key, second_key));
             },
 
             TokenType::Exit => {
                 super::exit();
             }
 
-            _ => println!("invalid command"),
+            _ => db.set_response(String::from("invalid command")),
         }
 
         db

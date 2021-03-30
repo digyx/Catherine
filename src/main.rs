@@ -18,13 +18,15 @@ fn input() -> String {
 // Start the Database!
 fn main() {
     let mut db = db::new();
-    
+
     loop {
         let raw = input();
         let lexer = lexer::new(raw);
         let mut parser = parser::new(lexer);
 
         db = parser.eval(db);
+
+        println!("{}", db.get_response());
     }
 }
 
