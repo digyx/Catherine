@@ -22,8 +22,13 @@ fn main() {
     loop {
         let raw = input();
         let lexer = lexer::new(raw);
-        let parser = parser::new(lexer);
+        let mut parser = parser::new(lexer);
 
         db = parser.eval(db);
     }
+}
+
+fn exit() {
+    println!("bye");
+    std::process::exit(0);
 }

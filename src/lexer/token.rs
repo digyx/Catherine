@@ -1,25 +1,33 @@
+#[derive(Copy, Clone)]
 pub enum TokenType {
+    Ident,
     Illegal,
-    EOF,
-
-    PrimeKey,
-    SecondKey,
-    Value,
 
     Put,
     Get,
     Update,
     Delete,
+    Exit,
 }
 
 pub struct Token {
-    Literal: String,
-    Type: TokenType
+    literal: String,
+    tok_type: TokenType
 }
 
 pub fn new(literal: String, tok_type: TokenType) -> Token {
     Token{
-        Literal: literal,
-        Type: tok_type,
+        literal,
+        tok_type,
+    }
+}
+
+impl Token {
+    pub fn get_type(&self) -> TokenType {
+        self.tok_type
+    }
+
+    pub fn get_literal(&self) -> String {
+        self.literal.clone()
     }
 }

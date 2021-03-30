@@ -13,7 +13,32 @@ impl Lexer {
     pub fn next_token(&mut self) ->  token::Token {
         self.skip_whitespace();
 
-        token::new(String::new(), TokenType::EOF)
+        if self.ch.is_alphabetic() {
+            let start_pos = self.position as usize;
+
+            while self.peek_char().is_alphabetic() {
+                self.read_char();
+            }
+
+            let end_pos = self.read_position as usize;
+            
+            let tok_type: TokenType;
+            let literal = &self.input.to_lowercase()[start_pos..end_pos];
+
+            match literal {
+                "get"    => tok_type = TokenType::Get,
+                "put"    => tok_type = TokenType::Put,
+                "update" => tok_type = TokenType::Update,
+                "delete" => tok_type = TokenType::Delete,
+                "exit"   => tok_type = TokenType::Exit,
+                &_       => tok_type = TokenType::Ident
+            }
+            
+            self.read_char();
+            return token::new(String::from(literal), tok_type)
+        }
+        
+        token::new(String::new(), TokenType::Illegal)
     }
 }
 
@@ -22,7 +47,7 @@ pub fn new(input: String) -> Lexer {
     let mut lexer = Lexer{
         input,
         position: 0,
-        read_position: 1,
+        read_position: 0,
         ch: 'a',
     };
 
@@ -41,6 +66,10 @@ impl Lexer {
 
         self.position = self.read_position;
         self.read_position  += 1;
+    }
+
+    fn peek_char(&self) -> char {
+        self.input.as_bytes()[self.read_position as usize] as char
     }
 
     fn skip_whitespace(&mut self) {

@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 // Type alias
-struct Database {
+pub struct Database {
     name: String,
     store: HashMap<String, PrimaryNode>,
 }
@@ -17,7 +17,7 @@ struct SecondaryNode {
 }
 
 impl Database {
-    fn put(&mut self, prime_key: String, second_key: String, value: String) {
+    pub fn put(&mut self, prime_key: String, second_key: String, value: String) {
         let inner_node = SecondaryNode{
             key: second_key.clone(),
             value: value.clone()
@@ -43,7 +43,7 @@ impl Database {
         }
     }
 
-    fn get(&self, prime_key: String, second_key: String) -> String {
+    pub fn get(&self, prime_key: String, second_key: String) -> String {
         let prime = self.store.get(prime_key.as_str());
 
         match prime {
@@ -52,11 +52,7 @@ impl Database {
         }
     }
 
-    fn update(&mut self, prime_key: String, second_key: String, value: String) {
-        self.put(prime_key, second_key, value);
-    }
-    
-    fn delete(&mut self, prime_key: String, second_key: String) {
+    pub fn delete(&mut self, prime_key: String, second_key: String) {
         // Delete from secondary key
     }
 }
@@ -70,15 +66,9 @@ pub fn new() -> Database {
     }
 }
 
-
 fn unwrap(result: Option<&SecondaryNode>) -> String {
     match result {
         Some(item) => (*item).value.clone(),
         None => String::from("nil")
     }
-}
-
-fn exit() {
-    println!("bye");
-    std::process::exit(0);
 }
