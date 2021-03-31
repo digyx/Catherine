@@ -7,6 +7,8 @@ pub enum TokenType {
     Get,
     Update,
     Delete,
+
+    Info,
     Exit,
 }
 

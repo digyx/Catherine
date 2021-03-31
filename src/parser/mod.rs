@@ -40,6 +40,10 @@ impl Parser {
                 db.set_response(format!("{}: {}", prime_key, second_key));
             },
 
+            TokenType::Info => {
+                db.return_info();
+            },
+
             TokenType::Exit => {
                 super::exit();
             }

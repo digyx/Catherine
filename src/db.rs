@@ -54,7 +54,19 @@ impl Database {
     }
 
     pub fn delete(&mut self, prime_key: String, second_key: String) {
-        // Delete from secondary key
+        if second_key == String::new() {
+            self.store.remove(prime_key.as_str());
+        }
+
+        let prime = self.store.get_mut(prime_key.as_str());
+        
+        match prime {
+            Some(node) => {
+                node.value.remove(second_key.as_str());
+                self.response = format!("{} : {}", prime_key, second_key);
+            },
+            None => self.response = String::from("failure")
+        }
     }
 
     pub fn set_response(&mut self, msg: String) {
@@ -64,6 +76,13 @@ impl Database {
     pub fn get_response(&self) -> String{
         self.response.clone()
     }
+
+    pub fn return_info(&mut self) {
+        self.response = format!(
+            "Name: {}\n\
+             Size: {}",
+             self.name, self.store.len());
+    }
 }
 
 
@@ -71,7 +90,7 @@ impl Database {
 pub fn new() -> Database {
     Database{
         store: HashMap::new(),
-        name: String::from("Hello world"),
+        name: String::from("default"),
         response: String::new(),
     }
 }

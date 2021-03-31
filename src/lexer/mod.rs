@@ -30,6 +30,7 @@ impl Lexer {
                 "put"    => tok_type = TokenType::Put,
                 "update" => tok_type = TokenType::Update,
                 "delete" => tok_type = TokenType::Delete,
+                "info"   => tok_type = TokenType::Info,
                 "exit"   => tok_type = TokenType::Exit,
                 &_       => tok_type = TokenType::Ident
             }
