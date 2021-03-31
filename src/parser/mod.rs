@@ -16,28 +16,25 @@ impl Parser {
     pub fn eval(&mut self, mut db: super::db::Database) -> super::db::Database {
         match self.next_token().get_type() {
             TokenType::Put | TokenType::Update => {
-                let prime_key = self.next_token().get_literal();
-                let second_key = self.next_token().get_literal();
-                let value = self.next_token().get_literal();
+                let prime_key = self.next_token();
+                let second_key = self.next_token();
+                let value = self.next_token();
 
-                db.put(prime_key.clone(), second_key.clone(), value.clone());
-                db.set_response(format!("{}: {{ {}: {} }}", prime_key, second_key, value));
+                db.put(prime_key, second_key, value);
             },
 
             TokenType::Get => {
-                let prime_key = self.next_token().get_literal();
-                let second_key = self.next_token().get_literal();
+                let prime_key = self.next_token();
+                let second_key = self.next_token();
 
-                let value = db.get(prime_key, second_key);
-                db.set_response(value);
+                db.get(prime_key, second_key);
             },
             
             TokenType::Delete => {
-                let prime_key = self.next_token().get_literal();
-                let second_key = self.next_token().get_literal();
+                let prime_key = self.next_token();
+                let second_key = self.next_token();
                 
-                db.delete(prime_key.clone(), second_key.clone());
-                db.set_response(format!("{}: {}", prime_key, second_key));
+                db.delete(prime_key, second_key);
             },
 
             TokenType::Info => {
@@ -48,7 +45,7 @@ impl Parser {
                 super::exit();
             }
 
-            _ => db.set_response(String::from("invalid command")),
+            _ => db.invalid_cmd(),
         }
 
         db

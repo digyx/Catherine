@@ -11,6 +11,10 @@ pub struct Lexer {
 
 impl Lexer {
     pub fn next_token(&mut self) ->  token::Token {
+        if self.read_position == self.input.len() as u32 {
+            return token::new(String::new(), TokenType::EOF)
+        }
+
         self.skip_whitespace();
 
         if self.ch.is_alphabetic() {
@@ -59,7 +63,7 @@ pub fn new(input: String) -> Lexer {
 
 impl Lexer {
     fn read_char(&mut self) {
-        if self.position >= self.input.len() as u32 {
+        if self.read_position >= self.input.len() as u32 {
             self.ch = '0';
         } else {
             self.ch = self.input.as_bytes()[self.read_position as usize] as char;

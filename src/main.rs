@@ -26,7 +26,7 @@ fn main() {
 
         db = parser.eval(db);
 
-        println!("{}", db.get_response());
+        println!("{}", db.response());
     }
 }
 

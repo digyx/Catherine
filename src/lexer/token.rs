@@ -1,7 +1,8 @@
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 pub enum TokenType {
     Ident,
     Illegal,
+    EOF,
 
     Put,
     Get,
@@ -29,7 +30,13 @@ impl Token {
         self.tok_type
     }
 
-    pub fn get_literal(&self) -> String {
-        self.literal.clone()
+    pub fn literal(&self) -> &str {
+        self.literal.as_str()
+    }
+}
+
+impl std::fmt::Display for Token {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.literal)
     }
 }
